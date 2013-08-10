@@ -151,8 +151,13 @@ public class GameManager : MonoBehaviour {
 			}
 			
    			if (GUI.Button (new Rect (Screen.width/2-200,Screen.height - 75, 50, 25), "Done")) {
+				
 				players[playerturn].GetComponent<PlayerScript>().displayInfo =false;
     			playerturn++;
+				selectedPlanet = null;
+				confirmPlanet = false;
+				battled=false;
+				
 				if(playerturn<numPlayers)
 				{	
 					
