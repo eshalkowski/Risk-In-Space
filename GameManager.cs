@@ -23,9 +23,10 @@ the same method names for AI
   initialization()
   reinforcementPhase() // will calculate reinforcments and
    guid the user through the procedure
-  123
+  456
   battlePhase()
   upgradePhase()
+  789
  */
 using UnityEngine;
 using System.Collections;
