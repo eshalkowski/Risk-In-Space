@@ -23,7 +23,7 @@ the same method names for AI
   initialization()
   reinforcementPhase() // will calculate reinforcments and
    guid the user through the procedure
-  456
+HEY DICK HEAD!
   battlePhase()
   upgradePhase()
   789
