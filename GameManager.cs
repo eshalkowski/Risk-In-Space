@@ -22,11 +22,7 @@ the same method names for AI
   
   initialization()
   reinforcementPhase() // will calculate reinforcments and
-   guid the user through the procedure
-<<<<<<< HEAD
-HEY DICK HEAD!
-=======
->>>>>>> 192d564ddd9a22f13b25a674533c29e699ef1696
+   guide the user through the procedure
   battlePhase()
   upgradePhase()
  */
@@ -51,10 +47,13 @@ public class GameManager : MonoBehaviour {
 	private bool roundComplete;
 	private bool confirmPlanet = false;
 	private bool battled = false;
-	
+	public List<Color> colors;
+	public GUISkin skin;
 	private int numPlanets = 5;
 	private bool firstRienforcement;
 	public int numChosenPlanets = 0;
+	private bool initialReinforcements;
+	int playersdone=0;
  
  	void OnGUI(){
 		
@@ -116,8 +115,9 @@ public class GameManager : MonoBehaviour {
 				{
 					if(battle(selectedPlanet,targetPlanet,1))
 					{
-						players[playerturn].GetComponent<PlayerScript>().addPlanet(targetPlanet);
-						targetPlanet.GetComponent<Planet>().owningPlayer = players[playerturn];
+						addPlanet(targetPlanet);
+						//players[playerturn].GetComponent<PlayerScript>().addPlanet(targetPlanet, players[playerturn]);
+						
 						
 					}
 				}
@@ -126,8 +126,9 @@ public class GameManager : MonoBehaviour {
 				{
 					if(battle(selectedPlanet,targetPlanet,2))
 					{
-						players[playerturn].GetComponent<PlayerScript>().addPlanet(targetPlanet);
-						targetPlanet.GetComponent<Planet>().owningPlayer = players[playerturn];
+						addPlanet(targetPlanet);
+						//players[playerturn].GetComponent<PlayerScript>().addPlanet(targetPlanet, players[playerturn]);
+						//targetPlanet.GetComponent<Planet>().owningPlayer = players[playerturn];
 						
 					}
 				}
@@ -136,8 +137,9 @@ public class GameManager : MonoBehaviour {
 				{
 					if(battle(selectedPlanet,targetPlanet,3))
 					{
-						players[playerturn].GetComponent<PlayerScript>().addPlanet(targetPlanet);
-						targetPlanet.GetComponent<Planet>().owningPlayer = players[playerturn];
+						addPlanet(targetPlanet);
+						//players[playerturn].GetComponent<PlayerScript>().addPlanet(targetPlanet,players[playerturn]);
+						//targetPlanet.GetComponent<Planet>().owningPlayer = players[playerturn];
 						
 					}
 				}
@@ -146,8 +148,9 @@ public class GameManager : MonoBehaviour {
 				{
 					if(battle(selectedPlanet,targetPlanet,selectedPlanet.GetComponent<Planet>().numOfUnits-1))
 					{
-						players[playerturn].GetComponent<PlayerScript>().addPlanet(targetPlanet);
-						targetPlanet.GetComponent<Planet>().owningPlayer = players[playerturn];
+						addPlanet(targetPlanet);
+						//players[playerturn].GetComponent<PlayerScript>().addPlanet(targetPlanet,players[playerturn]);
+						//targetPlanet.GetComponent<Planet>().owningPlayer = players[playerturn];
 						
 					}
 				}
@@ -180,11 +183,18 @@ public class GameManager : MonoBehaviour {
   		if(state == 3){
    			GUI.Box(new Rect(0,Screen.height - 100,Screen.width,100), "Upgrade Phase");
    			if (GUI.Button (new Rect (Screen.width/2-50,Screen.height - 50, 100, 50), "Done")) {
-    			playerturn++;
-				if(playerturn>numPlayers)
+    			players[playerturn].GetComponent<PlayerScript>().displayInfo =false;
+				playersdone++;
+				if(playersdone<numPlayers)
+				{
+					
+					playerturn ++;
+				}
+				else
 				{
 					state=1;
 					playerturn=0;
+					playersdone=0;
 				}
    			}
   		}
@@ -192,14 +202,18 @@ public class GameManager : MonoBehaviour {
 	//this is ran before any start function is ran
 	void Awake()
 	{
+		colors= new List<Color>();
+		colors.Add(new Color(355,0,0));
+		colors.Add( new Color(0,355,0));
 		players = new List<GameObject>();
   		for(int z = 0; z < numPlayers; z++){
    			string name = "Player" + (z+1);
 			GameObject curPlayer = (GameObject)GameObject.Instantiate(playerPrefab);
-			curPlayer.GetComponent<PlayerScript>().color = new Color(200*z,0*z, 15*z);
+			curPlayer.GetComponent<PlayerScript>().color =colors[z];
 			curPlayer.name = name;
    			players.Add (curPlayer);
   		}
+		
 	}
  	// Use this for initialization
 	void Start () {
@@ -216,7 +230,9 @@ public class GameManager : MonoBehaviour {
 		}
 		if(state ==1)
 		{
+			
 			initialReinforcement();
+			
 		}
 		if(state == 2)
 		{
@@ -265,10 +281,10 @@ public class GameManager : MonoBehaviour {
 		
 					GameObject curPlayer = players[playerturn];
 					
-					curPlayer.GetComponent<PlayerScript>().addPlanet(planet);
+					curPlayer.GetComponent<PlayerScript>().addPlanet(planet,curPlayer);
 					
 					
-					planet.GetComponent<Planet>().owningPlayer = curPlayer; 
+					
 					
 					
 	}
@@ -282,7 +298,8 @@ public class GameManager : MonoBehaviour {
 			for(int i =0; i < players.Count; i++)
 			{
 				players[i].GetComponent<PlayerScript>().calculateUnits();
-				players[i].GetComponent<PlayerScript>().numOfUnitsToDeploy += 10;
+				if(initialReinforcements)
+					players[i].GetComponent<PlayerScript>().numOfUnitsToDeploy += 5;
 			}
 			firstRienforcement=false;
 		}
@@ -318,6 +335,8 @@ public class GameManager : MonoBehaviour {
 			{
 				state++;
 				selectedPlanet = null;
+				firstRienforcement=true;
+				initialReinforcements = false;
 			}
 		}
 		
@@ -381,6 +400,7 @@ public class GameManager : MonoBehaviour {
 				if(targetPlanet.GetComponent<Planet>().numOfUnits ==0)
 				{
 					targetPlanet.GetComponent<Planet>().numOfUnits = attackingUnits;
+					playerPlanet.GetComponent<Planet>().numOfUnits -= attackingUnits;
 					return true;
 				}
 				

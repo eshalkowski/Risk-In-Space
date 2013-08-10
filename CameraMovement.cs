@@ -102,19 +102,19 @@ public class CameraMovement : MonoBehaviour {
 				{
 					for(int i =0; i < solarSystems.Count; i++)
 					{
-						solarSystems[i].renderer.enabled=false;
-						solarSystems[i].collider.enabled=false;
+						solarSystems[i].renderer.enabled=true;
+						solarSystems[i].collider.enabled=true;
 					}
 				}
 				else
 				{
 					//Debug.Log("HERE");
-					if(solarSystems[0].renderer.enabled == false)
+					if(solarSystems[0].renderer.enabled == true)
 					{
 						for(int i =0; i < solarSystems.Count; i++)
 						{
-							solarSystems[i].renderer.enabled = true;
-							solarSystems[i].collider.enabled = true;
+							solarSystems[i].renderer.enabled = false;
+							solarSystems[i].collider.enabled = false;
 						}
 					}
 				}
