@@ -6,6 +6,8 @@ public class Planet : MonoBehaviour {
 	public int numOfUnits{get;set;}
 	public GameObject owningPlayer{get;set;}	
 	public GameObject solarSystem;
+	public Light halo;
+	public bool pulseLight =false;
 
 	void Start () {
 		owningPlayer = null;
@@ -18,9 +20,12 @@ public class Planet : MonoBehaviour {
 	}
 	void Update()
 	{
+		
+			
 		//Needs to be moved to more efficent spot
-		if(owningPlayer !=null)
-			renderer.material.color = owningPlayer.GetComponent<PlayerScript>().color;
+		//if(owningPlayer !=null);
+			
+			//renderer.material.color = owningPlayer.GetComponent<PlayerScript>().color;
 		
 	}
 	
@@ -29,6 +34,7 @@ public class Planet : MonoBehaviour {
 	}
 	
 	public void updateHalo(){
-		
+		halo.color = owningPlayer.GetComponent<PlayerScript>().color;
 	}
+	
 }
