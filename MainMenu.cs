@@ -15,6 +15,11 @@ public class MainMenu : MonoBehaviour {
 		{
 			Application.LoadLevel("GameSetup");
 		}
+		if (GUI.Button (new Rect(xContPos + ((mainContainerWidth - buttonWidth)/2),
+			yContPos + 105, buttonWidth, buttonHeight), "Exit"))
+		{
+			Application.Quit();
+		}
 	}
 	// Use this for initialization
 	void Start () {
