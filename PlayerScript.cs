@@ -35,9 +35,11 @@ public class PlayerScript : MonoBehaviour {
 	void Update () {
 	
 	}
-	public void addPlanet(GameObject planet)
+	public void addPlanet(GameObject planet, GameObject player)
 	{
 		ownedPlanets.Add(planet);
+		planet.GetComponent<Planet>().owningPlayer = player; 
+					planet.GetComponent<Planet>().updateHalo();
 	}
 	
 	public void removePlanet(GameObject planet)
