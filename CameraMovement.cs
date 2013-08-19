@@ -24,6 +24,7 @@ public class CameraMovement : MonoBehaviour {
 	public List<GameObject> solarSystems;
 	public int maxInMovement = 300;
 	public int maxOutMovement = 1000;
+	public Vector3 lastCameraPos;
 	
 	// Use this for initialization
 	void Start () {	
@@ -151,8 +152,16 @@ public class CameraMovement : MonoBehaviour {
 	void exitZoom(){
 		//changes the camera back to orthographic view
 		MainCamera.isOrthoGraphic = true;
-		MainCamera.orthographicSize = clicked.transform.localScale.x*clicked.transform.parent.localScale.x;
-		MainCamera.transform.position = new Vector3(clicked.transform.position.x,1000,clicked.transform.position.z);
+		if(clicked!=null)
+		{
+			MainCamera.orthographicSize = clicked.transform.localScale.x*clicked.transform.parent.localScale.x;
+			MainCamera.transform.position = new Vector3(clicked.transform.position.x,1000,clicked.transform.position.z);
+		}
+		else
+		{
+			MainCamera.transform.position = lastCameraPos;
+			MainCamera.orthographicSize = maxInMovement;
+		}
 		MainCamera.transform.eulerAngles =new Vector3(90,0,0);
 		zoomed = false;
 		clicks = 0;
@@ -191,7 +200,7 @@ public class CameraMovement : MonoBehaviour {
 	void displayDetailedInfo()
 	{
 		GUI.BeginGroup(new Rect(screenWidth/2+100, screenHeight/2-100,300,400));
-		if(clicked.GetComponent<Planet>().owningPlayer != null)
+		if(clicked!=null && clicked.GetComponent<Planet>().owningPlayer != null)
 		{
 			GUI.Label(new Rect(0,20,100,100), "Owner: "+clicked.GetComponent<Planet>().owningPlayer.gameObject.name);
 		}
@@ -199,15 +208,19 @@ public class CameraMovement : MonoBehaviour {
 		{
 			GUI.Label(new Rect(0,20,100,100), "Owner: None");
 		}
-		GUI.Label(new Rect(0,35,100,100), "Unit Count: "+clicked.GetComponent<Planet>().numOfUnits);
-		GUI.Label (new Rect(0,50,200,400),"Solar System: "+clicked.GetComponent<Planet>().solarSystem.gameObject.name);
-		GUI.Label(new Rect(0,65,200,400), "Solar System Control: "
-			+clicked.GetComponent<Planet>().solarSystem.GetComponent<SolarSystem>().calculateOwnedPlanets()
-			+"/"+clicked.GetComponent<Planet>().solarSystem.GetComponent<SolarSystem>().planets.Count);
+		if(clicked!=null)
+		{
+			GUI.Label(new Rect(0,35,100,100), "Unit Count: "+clicked.GetComponent<Planet>().numOfUnits);
+			GUI.Label (new Rect(0,50,200,400),"Solar System: "+clicked.GetComponent<Planet>().solarSystem.gameObject.name);
+			GUI.Label(new Rect(0,65,200,400), "Solar System Control: "
+				+clicked.GetComponent<Planet>().solarSystem.GetComponent<SolarSystem>().calculateOwnedPlanets()
+				+"/"+clicked.GetComponent<Planet>().solarSystem.GetComponent<SolarSystem>().planets.Count);
+		}
 		GUI.EndGroup();
 	}
 	//zooms to a planet when it is double clicked
 	void zoomToPlanet(){
+		
 		if(Input.GetMouseButtonDown(0))
 		{	
 			if(clicks==0)
@@ -220,6 +233,7 @@ public class CameraMovement : MonoBehaviour {
 				//checks if the same gameobject is clicked twice in a row
 				if(clicked!=null &&(clicked == GetClickedGameObject()))
 				{
+					lastCameraPos = MainCamera.transform.position;
 					Debug.Log(clicked.transform.position.x);
 					//changes the camera to perspective and sets up the angle to see the planet
 					MainCamera.transform.position = new Vector3(clicked.transform.position.x+

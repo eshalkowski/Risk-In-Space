@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerScript : MonoBehaviour {
+	public List<GameObject> Players;
 	private List<GameObject> ownedPlanets;
 	private List<GameObject> systems;
 	public int state{get;set;}
@@ -22,6 +23,11 @@ public class PlayerScript : MonoBehaviour {
 			GUI.Label(new Rect(0,40,500,20), "Rienforcements: " + this.numOfUnitsToDeploy);
 			GUI.EndGroup();
 		}
+	}
+	void Awake()
+	{
+		DontDestroyOnLoad(this);
+		Players = new List<GameObject>();
 	}
 	
 	// Use this for initialization

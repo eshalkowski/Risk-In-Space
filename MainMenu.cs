@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class MainMenu : MonoBehaviour {
+	
 	public int mainContainerWidth = 250;
 	public int mainContainerHeight = 450;
 	public int buttonWidth = 200;
