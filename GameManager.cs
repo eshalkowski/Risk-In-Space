@@ -22,6 +22,7 @@ the same method names for AI
   
   initialization()
   reinforcementPhase() // will calculate reinforcments and
+
    guide the user through the procedure
 
   battlePhase()
@@ -33,10 +34,10 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
  
-	public GameObject playerPrefab;
+	
 	public List<SolarSystem> solarSystems;
 	
-	public int numPlayers = 2;
+	public int numPlayers;
 	public int playerturn = 0;
  	//public GameObject[] players = new GameObject[numPlayers]();
  	public List<GameObject> players;
@@ -48,7 +49,7 @@ public class GameManager : MonoBehaviour {
 	private bool roundComplete;
 	private bool confirmPlanet = false;
 	private bool battled = false;
-	public List<Color> colors;
+	//public List<Color> colors;
 	public GUISkin skin;
 	private int numPlanets = 5;
 	private bool firstRienforcement;
@@ -203,21 +204,16 @@ public class GameManager : MonoBehaviour {
 	//this is ran before any start function is ran
 	void Awake()
 	{
-		colors= new List<Color>();
-		colors.Add(new Color(355,0,0));
-		colors.Add( new Color(0,355,0));
-		players = new List<GameObject>();
-  		for(int z = 0; z < numPlayers; z++){
-   			string name = "Player" + (z+1);
-			GameObject curPlayer = (GameObject)GameObject.Instantiate(playerPrefab);
-			curPlayer.GetComponent<PlayerScript>().color =colors[z];
-			curPlayer.name = name;
-   			players.Add (curPlayer);
-  		}
+		
+		
+  		
 		
 	}
  	// Use this for initialization
 	void Start () {
+		players = new List<GameObject>();
+		players.AddRange(GameObject.Find("Player1").GetComponent<PlayerScript>().Players);
+		numPlayers = players.Count;
   		state = 0;
 	  	//players = new GameObject[numPlayers];
   		

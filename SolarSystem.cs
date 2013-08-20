@@ -9,9 +9,11 @@ public class SolarSystem : MonoBehaviour {
 	public int playerControlledPlanets{get;set;}
 	public int playerTurn{get;set;}
 	public GameObject curPlayer{get;set;}
+	public List<List<GameObject>> planetPaths;
 
 	// Use this for initialization
 	void Start () {
+		planetPaths = new List<List<GameObject>>();
 	
 	}
 	

@@ -8,7 +8,8 @@ public class GameSetup : MonoBehaviour {
 	public int buttonWidth = 200;
 	public int buttonHeight = 50;
 	public List <GUIStyle> colors;
-	
+	public List<GameObject> Players;
+	public GameObject playerPrefab;
 	private int xContPos; 
 	private int yContPos; 
 	private int numPlayers = 0;
@@ -31,8 +32,18 @@ public class GameSetup : MonoBehaviour {
 		if (GUI.Button (new Rect(xContPos + ((mainContainerWidth - buttonWidth)/2),
 			yContPos + 350, buttonWidth, buttonHeight), "Start Game"))
 		{
+			for(int z = 0; z < numPlayers+2; z++){
+   				string name = "Player" + (z+1);
+				GameObject curPlayer = (GameObject)GameObject.Instantiate(playerPrefab);
+				curPlayer.GetComponent<PlayerScript>().color =playerColors[z];
+				curPlayer.name = name;
+   				Players.Add (curPlayer);
+			}
+			Players[0].GetComponent<PlayerScript>().Players.AddRange(Players);
+			Application.LoadLevel("RiskInSpace");
+  		}
 			//start game with selected preferences
-		}
+		
 		GUI.Box(new Rect(xContPos + ((mainContainerWidth - 250)/2),yContPos + 50,250,90), "Number of Players");
 		//GUI.Label(new Rect (25, 25, 250, 30),"Number of Players");
 		//0 = 2, 1 = 3, etc...
@@ -79,7 +90,7 @@ public class GameSetup : MonoBehaviour {
 //	}
 	// Use this for initialization
 	void Start () {
-		
+		Players = new List<GameObject> ();
 	}
 	void Awake(){
 		availableColors = new List<Color>();
