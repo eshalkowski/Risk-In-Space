@@ -1,0 +1,10 @@
+Medium Blue 	0-0-205
+Dark Green 	0-100-0
+Aquamarine 	127-255-212
+Yellow 	255-255-0
+Red 	255-0-0
+Deep Pink 	255-20-147
+Dark Violet 	148-0-211
+Dark Orange 	255-140-0
+Snow 2 	238-233-233
+Dark Slate Gray 	49-79-79
