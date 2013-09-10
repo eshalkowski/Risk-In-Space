@@ -36,12 +36,12 @@ public class GameManager : MonoBehaviour {
  
 	
 	public List<SolarSystem> solarSystems;
-	
+	public LineManager lineManager;
 	public int numPlayers;
 	public int playerturn = 0;
  	//public GameObject[] players = new GameObject[numPlayers]();
  	public List<GameObject> players;
- 	//public GameObject player2;
+ 	public bool createlines;
  	public int state;
 	private GameObject clickedObject;
 	private GameObject selectedPlanet;
@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviour {
 	public int numChosenPlanets = 0;
 	private bool initialReinforcements;
 	int playersdone=0;
+	public float timer =0;
+	public float timestop = 1.5f;
  
  	void OnGUI(){
 		
@@ -173,11 +175,14 @@ public class GameManager : MonoBehaviour {
 					updateSolarSystems();
 					battled = false;
 				}
-				else{					
+				else{		
+					movePlanets();
+					createlines = true;
 					playerturn = 0;
 					updateSolarSystems();
 					battled=false;
 					state++;
+					
 				}
    			}
   		}
@@ -238,6 +243,18 @@ public class GameManager : MonoBehaviour {
 		
 		players[playerturn].GetComponent<PlayerScript>().displayInfo =true;
 		
+		if(createlines&&timer<timestop)
+		{
+			createLines();
+			timer += Time.deltaTime;
+		}
+		else if(timer >timestop)
+			{
+				createlines =false;
+				timer=0f;
+			}
+		
+		
   	
  	}
 	//allows the current player to select a planet
@@ -279,7 +296,7 @@ public class GameManager : MonoBehaviour {
 					GameObject curPlayer = players[playerturn];
 					
 					curPlayer.GetComponent<PlayerScript>().addPlanet(planet,curPlayer);
-					
+					lineManager.updateColor(planet);
 					
 					
 					
@@ -410,6 +427,21 @@ public class GameManager : MonoBehaviour {
 		}
 		return false;
 	}
+	//rotates all planets around their respective suns also resets the lines connecting the planets
+	void movePlanets()
+	{
+		for(int i=0; i < solarSystems.Count; i++)
+		{
+			for(int y=0; y<solarSystems[i].planets.Count; y++)
+			{
+				Debug.Log(solarSystems[i].planets[y].name);
+				solarSystems[i].planets[y].Orbit();
+			}
+		}
+		
+			
+		
+	}
 	//returns the gameobject under the mouse
 	GameObject GetClickedGameObject()
 	{
@@ -423,4 +455,9 @@ public class GameManager : MonoBehaviour {
     		return null;
 		
 	}
+	void createLines()
+	{
+		lineManager.removeLines();
+		lineManager.createLines();
+		}
 }

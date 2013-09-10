@@ -22,7 +22,7 @@ public class CameraMovement : MonoBehaviour {
 	public bool displayInfo;
 	private float zoomedFieldOfView=10;
 	public List<GameObject> solarSystems;
-	public int maxInMovement = 300;
+	public int maxInMovement = 200;
 	public int maxOutMovement = 1000;
 	public Vector3 lastCameraPos;
 	
@@ -155,7 +155,7 @@ public class CameraMovement : MonoBehaviour {
 		if(clicked!=null)
 		{
 			MainCamera.orthographicSize = clicked.transform.localScale.x*clicked.transform.parent.localScale.x;
-			MainCamera.transform.position = new Vector3(clicked.transform.position.x,1000,clicked.transform.position.z);
+			MainCamera.transform.position = new Vector3(clicked.transform.position.x,100,clicked.transform.position.z);
 		}
 		else
 		{
